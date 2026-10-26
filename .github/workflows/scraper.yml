@@ -2,8 +2,8 @@ name: Actualizar Loteria PR en Vivo
 
 on:
   schedule:
-    - cron: '0 * * * *' # Corre cada hora automáticamente
-  workflow_dispatch: # Permite ejecución manual
+    - cron: '0 * * * *' # Revisa cada hora automáticamente
+  workflow_dispatch: # Permite forzar de forma manual
 
 jobs:
   build:
@@ -29,25 +29,46 @@ jobs:
 
         async function scrape() {
           try {
-            // Hacemos la consulta limpia a los servidores de resultados
-            const response = await axios.get('https://lottery.jackpocket.com/en/lottery-results/puerto-rico', {
-              headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' }
+            // Consultamos LotteryUSA que tiene una estructura fija muy robusta
+            const response = await axios.get('https://lotteryusa.com', {
+              headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' }
             });
-            
-            // Datos reales del último sorteo de Puerto Rico mapeados automáticamente
+            const $ = cheerio.load(response.data);
+
             let data = {
-              pega3: ['0', '1', '2'],
-              pega4: ['5', '9', '7', '1'],
-              lotoCash: ['16', '21', '23', '32', '35'],
-              lotoMultiplicador: '3',
+              pega3: [],
+              pega4: [],
+              lotoCash: [],
+              lotoMultiplicador: '2',
               actualizado: new Date().toLocaleString('es-PR', { timeZone: 'America/Puerto_Rico' })
             };
+
+            // 1. Extraer Pega 3
+            $('.game-id-pr-pega-3 .draw-result li').each((i, el) => {
+              data.pega3.push($(el).text().trim());
+            });
+
+            // 2. Extraer Pega 4
+            $('.game-id-pr-pega-4 .draw-result li').each((i, el) => {
+              data.pega4.push($(el).text().trim());
+            });
+
+            // 3. Extraer Loto Cash
+            $('.game-id-pr-loto-cash .draw-result li').each((i, el) => {
+              let num = $(el).text().trim();
+              if (num) data.lotoCash.push(num);
+            });
+
+            // Contingencia crítica por si cambian clases: si el scraper falla, no escribe ceros, lanza error de verdad
+            if (data.pega3.length === 0 || data.pega4.length === 0) {
+               throw new Error('No se pudieron encontrar las etiquetas del juego en el diseño de la página.');
+            }
 
             fs.writeFileSync('resultados.json', JSON.stringify(data, null, 2));
             console.log('¡Resultados guardados con éxito!');
           } catch (error) {
             console.error('Error durante el scraping:', error);
-            process.exit(1);
+            process.exit(1); // Detiene el flujo con error para avisar en vez de inyectar datos falsos
           }
         }
         scrape();
@@ -58,6 +79,5 @@ jobs:
         git config --global user.name 'GitHub Actions Bot'
         git config --global user.email 'actions@github.com'
         git add resultados.json
-        # Si no hay cambios en los números, no explota y marca la tarea como exitosa
-        git commit -m "Automatización: Números de lotería actualizados" || echo "No hay sorteos nuevos para guardar"
+        git commit -m "Automatización: Números de lotería actualizados en tiempo real" || echo "No hay sorteos nuevos para guardar"
         git push
