@@ -2,94 +2,254 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lotería de Puerto Rico - Resultados</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Retro Tómbola PR</title>
+    <!-- Configuración PWA Móvil -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#050515">
+    <link rel="manifest" href="data:application/manifest+json,{%22name%22:%22Retro%20Tombola%22,%22short_name%22:%22TombolaPR%22,%22start_url%22:%22.%22,%22display%22:%22standalone%22,%22background_color%22:%22%23050515%22,%22theme_color%22:%22%23ff007f%22}">
+
     <style>
-        body { font-family: system-ui, -apple-system, sans-serif; background-color: #f7fafc; color: #2d3748; padding: 20px; text-align: center; }
-        .container { max-width: 480px; margin: 0 auto; }
-        h1 { color: #1a365d; font-size: 1.8rem; margin-bottom: 5px; }
-        .update-tag { font-size: 0.85rem; color: #718096; margin-bottom: 20px; }
-        .card { background: white; padding: 20px; margin: 15px 0; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-top: 5px solid #3182ce; text-align: center; }
-        .card.loto { border-top-color: #e53e3e; }
-        .game-title { font-size: 1.3rem; font-weight: bold; margin-bottom: 12px; color: #2d3748; }
-        .numbers { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
-        .ball { width: 42px; height: 42px; background: radial-gradient(circle at 30% 30%, #ecc94b, #d69e2e); color: white; font-weight: bold; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; box-shadow: 0 3px 6px rgba(0,0,0,0.1); }
-        .ball.red { background: radial-gradient(circle at 30% 30%, #e53e3e, #b3160e); }
-        .btn { background: #3182ce; color: white; border: none; padding: 12px 24px; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 15px; width: 100%; font-size: 1rem; }
-        .btn:hover { background: #2b6cb0; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body {
+            margin: 0;
+            padding: 15px;
+            background-color: #050515;
+            color: #fff;
+            font-family: 'Courier New', Courier, monospace;
+            overflow-x: hidden;
+            background-image: 
+                linear-gradient(rgba(255, 0, 127, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 242, 254, 0.1) 1px, transparent 1px);
+            background-size: 30px 30px;
+            animation: gridMove 4s linear infinite;
+        }
+
+        @keyframes gridMove {
+            from { background-position: 0 0; }
+            to { background-position: 0 30px; }
+        }
+
+        .container { max-width: 440px; margin: 0 auto; padding-bottom: 30px; }
+        
+        h1 {
+            font-size: 2.2rem;
+            text-transform: uppercase;
+            color: #fff;
+            text-shadow: 0 0 10px #ff007f, 0 0 20px #ff007f, 0 0 40px #ff007f;
+            margin-bottom: 2px;
+            font-style: italic;
+        }
+        
+        .sub { color: #00f2fe; text-shadow: 0 0 5px #00f2fe; font-size: 0.8rem; margin-bottom: 25px; text-transform: uppercase; }
+
+        .card {
+            background: rgba(10, 10, 30, 0.85);
+            border: 2px solid #ff007f;
+            border-radius: 16px;
+            padding: 16px;
+            margin: 18px 0;
+            box-shadow: 0 0 15px rgba(255, 0, 127, 0.4);
+            position: relative;
+            backdrop-filter: blur(5px);
+        }
+
+        .card.loto { border-color: #00f2fe; box-shadow: 0 0 15px rgba(0, 242, 254, 0.4); }
+        .card.powerball { border-color: #9d4edd; box-shadow: 0 0 15px rgba(157, 78, 221, 0.4); }
+
+        .game-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-align: left;
+            margin-bottom: 2px;
+            color: #fff;
+        }
+        .card.loto .game-title { color: #00f2fe; text-shadow: 0 0 5px #00f2fe; }
+        .card.powerball .game-title { color: #9d4edd; text-shadow: 0 0 5px #9d4edd; }
+        
+        .date { font-size: 0.75rem; color: #ff007f; opacity: 0.8; text-align: left; margin-bottom: 12px; }
+        .card.loto .date { color: #00f2fe; }
+        .card.powerball .date { color: #9d4edd; }
+
+        .balls-row { display: flex; gap: 8px; justify-content: flex-start; flex-wrap: wrap; }
+        
+        .ball {
+            width: 44px;
+            height: 44px;
+            background: #000;
+            border: 2px solid #ff007f;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: #ff007f;
+            text-shadow: 0 0 5px #ff007f;
+            box-shadow: inset 0 0 8px rgba(255,0,127,0.6);
+        }
+        .card.loto .ball { border-color: #00f2fe; color: #00f2fe; text-shadow: 0 0 5px #00f2fe; box-shadow: inset 0 0 8px rgba(0,242,254,0.6); }
+        .card.powerball .ball { border-color: #9d4edd; color: #9d4edd; text-shadow: 0 0 5px #9d4edd; box-shadow: inset 0 0 8px rgba(157,78,221,0.6); }
+
+        /* Esferas Especiales de Bonos */
+        .ball.bonus { background: #ff007f; color: #000; text-shadow: none; box-shadow: 0 0 10px #ff007f; }
+        .ball.powerball-extra { background: #9d4edd; color: #000; text-shadow: none; box-shadow: 0 0 10px #9d4edd; }
+        .ball.mult { border-radius: 8px; width: auto; padding: 0 10px; font-size: 0.9rem; background: rgba(0,242,254,0.2); }
+
+        /* Botón de actualización Futurista */
+        .btn-glow {
+            width: 100%;
+            background: #000;
+            border: 2px solid #00f2fe;
+            border-radius: 12px;
+            color: #00f2fe;
+            padding: 15px;
+            font-size: 1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(0, 242, 254, 0.4);
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            font-family: inherit;
+        }
+        .btn-glow:active {
+            background: #00f2fe;
+            color: #000;
+            box-shadow: 0 0 25px #00f2fe;
+            transform: scale(0.98);
+        }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h1>🇵🇷 Lotería Electrónica</h1>
-        <div class="update-tag" id="fecha-actualizacion">Cargando última actualización...</div>
+        <h1>Cyber Tómbola</h1>
+        <div class="sub" id="sync-status">Sincronizando red espacial...</div>
 
-        <!-- Pega 3 -->
+        <!-- PEGA 2 DIA -->
         <div class="card">
-            <div class="game-title">Pega 3</div>
-            <div class="numbers" id="pega3-container"></div>
+            <div class="game-title">Pega 2 Día</div>
+            <div class="date" id="date-p2d">--/--/----</div>
+            <div class="balls-row" id="p2d-container"></div>
         </div>
 
-        <!-- Pega 4 -->
+        <!-- PEGA 2 NOCHE -->
         <div class="card">
-            <div class="game-title">Pega 4</div>
-            <div class="numbers" id="pega4-container"></div>
+            <div class="game-title">Pega 2 Noche</div>
+            <div class="date" id="date-p2n">--/--/----</div>
+            <div class="balls-row" id="p2n-container"></div>
         </div>
 
-        <!-- Loto Cash -->
+        <!-- PEGA 3 DIA -->
+        <div class="card">
+            <div class="game-title">Pega 3 Día</div>
+            <div class="date" id="date-p3d">--/--/----</div>
+            <div class="balls-row" id="p3d-container"></div>
+        </div>
+
+        <!-- PEGA 3 NOCHE -->
+        <div class="card">
+            <div class="game-title">Pega 3 Noche</div>
+            <div class="date" id="date-p3n">--/--/----</div>
+            <div class="balls-row" id="p3n-container"></div>
+        </div>
+
+        <!-- PEGA 4 DIA -->
+        <div class="card">
+            <div class="game-title">Pega 4 Día</div>
+            <div class="date" id="date-p4d">--/--/----</div>
+            <div class="balls-row" id="p4d-container"></div>
+        </div>
+
+        <!-- PEGA 4 NOCHE -->
+        <div class="card">
+            <div class="game-title">Pega 4 Noche</div>
+            <div class="date" id="date-p4n">--/--/----</div>
+            <div class="balls-row" id="p4n-container"></div>
+        </div>
+
+        <!-- LOTO CASH -->
         <div class="card loto">
             <div class="game-title">Loto Cash</div>
-            <div class="numbers" id="loto-container"></div>
+            <div class="date" id="date-loto">--/--/----</div>
+            <div class="balls-row" id="loto-container"></div>
         </div>
 
-        <button class="btn" onclick="obtenerDatosLocales()">🔄 Refrescar Pantalla</button>
+        <!-- POWERBALL -->
+        <div class="card powerball">
+            <div class="game-title">Powerball®</div>
+            <div class="date" id="date-power">--/--/----</div>
+            <div class="balls-row" id="power-container"></div>
+        </div>
+
+        <button class="btn-glow" onclick="conectarTómbola()">🔄 Forzar Señal Neon</button>
     </div>
 
     <script>
-        async function obtenerDatosLocales() {
+        async function conectarTómbola() {
             try {
-                // Buscamos el archivo JSON en tu propio repositorio de GitHub (¡Cero problemas de CORS!)
-                // Agregamos un número aleatorio al final (?v=...) para obligar al navegador a no usar caché vieja al dar F5
-                const respuesta = await fetch('resultados.json?v=' + Math.random());
-                const datos = await respuesta.json();
+                const res = await fetch('resultados.json?_nocache=' + new Date().getTime());
+                const d = await res.json();
 
-                document.getElementById('fecha-actualizacion').innerText = "Último sorteo verificado: " + datos.actualizado;
+                document.getElementById('sync-status').innerText = "Terminal Sincronizada: " + d.actualizado;
 
-                // Renderizar Pega 3
-                inyectarBolas("pega3-container", datos.pega3);
-                // Renderizar Pega 4
-                inyectarBolas("pega4-container", datos.pega4);
-                // Renderizar Loto Cash + Multiplicador
-                inyectarBolas("loto-container", datos.lotoCash, datos.lotoMultiplicador);
+                renderizarBolas("p2d-container", "date-p2d", d.pega2Dia.numbers, d.pega2Dia.date);
+                renderizarBolas("p2n-container", "date-p2n", d.pega2Noche.numbers, d.pega2Noche.date);
+                renderizarBolas("p3d-container", "date-p3d", d.pega3Dia.numbers, d.pega3Dia.date);
+                renderizarBolas("p3n-container", "date-p3n", d.pega3Noche.numbers, d.pega3Noche.date);
+                renderizarBolas("p4d-container", "date-p4d", d.pega4Dia.numbers, d.pega4Dia.date);
+                renderizarBolas("p4n-container", "date-p4n", d.pega4Noche.numbers, d.pega4Noche.date);
+                
+                // Loto Cash con su Bonus Ball + Multiplicador
+                renderizarBolas("loto-container", "date-loto", d.lotoCash.numbers, d.lotoCash.date, d.lotoCash.bonus, "bonus", "x" + d.lotoCash.multiplier);
+                
+                // Powerball con su Powerball Ball + Powerplay
+                renderizarBolas("power-container", "date-power", d.powerball.numbers, d.powerball.date, d.powerball.powerball, "powerball-extra", "x" + d.powerball.powerplay);
 
-            } catch (error) {
-                console.error("Error al leer los datos locales:", error);
-                document.getElementById('fecha-actualizacion').innerText = "Error al sincronizar los números.";
+            } catch (err) {
+                document.getElementById('sync-status').innerText = "Error de enlace estelar.";
             }
         }
 
-        function inyectarBolas(idContenedor, numeros, extra = null) {
-            const contenedor = document.getElementById(idContenedor);
-            contenedor.innerHTML = "";
-            
-            numeros.forEach(num => {
-                const bola = document.createElement("div");
-                bola.className = "ball";
-                bola.innerText = num;
-                contenedor.appendChild(bola);
+        function renderizarBolas(contId, dateId, numeros, fechaSort, extraBall = null, extraClass = "", multText = null) {
+            const cont = document.getElementById(contId);
+            document.getElementById(dateId).innerText = "Sorteo: " + fechaSort;
+            cont.innerHTML = "";
+
+            numeros.forEach(n => {
+                const b = document.createElement("div");
+                b.className = "ball";
+                b.innerText = n;
+                cont.appendChild(b);
             });
 
-            if (extra) {
-                const bolaExtra = document.createElement("div");
-                bolaExtra.className = "ball red";
-                bolaExtra.innerText = "x" + extra;
-                contenedor.appendChild(bolaExtra);
+            if (extraBall) {
+                const eb = document.createElement("div");
+                eb.className = `ball ${extraClass}`;
+                eb.innerText = extraBall;
+                cont.appendChild(eb);
+            }
+
+            if (multText) {
+                const mb = document.createElement("div");
+                mb.className = "ball mult";
+                mb.innerText = multText;
+                cont.appendChild(mb);
             }
         }
 
-        // Ejecutar inmediatamente al abrir o refrescar
-        window.onload = obtenerDatosLocales;
+        // Service Worker básico integrado para cumplir los requisitos de PWA móvil
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('data:text/javascript,self.addEventListener(%22fetch%22,function(e){})', {scope: './'});
+        }
+
+        // Ejecutar inmediatamente al abrir la terminal o dar refresh (F5)
+        window.onload = conectarTómbola;
     </script>
 </body>
 </html>
