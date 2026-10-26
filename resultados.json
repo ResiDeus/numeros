@@ -1,7 +1,22 @@
 {
-  "pega3": ["0", "0", "0"],
-  "pega4": ["0", "0", "0", "0"],
-  "lotoCash": ["00", "00", "00", "00", "00"],
-  "lotoMultiplicador": "0",
-  "actualizado": "Cargando..."
+  "pega3": [
+    "0",
+    "1",
+    "2"
+  ],
+  "pega4": [
+    "5",
+    "9",
+    "7",
+    "1"
+  ],
+  "lotoCash": [
+    "16",
+    "21",
+    "23",
+    "32",
+    "35"
+  ],
+  "lotoMultiplicador": "3",
+  "actualizado": "10/26/2026, 7:57:33 a. m."
 }
