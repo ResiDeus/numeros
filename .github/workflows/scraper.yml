@@ -2,8 +2,8 @@ name: Actualizar Loteria PR en Vivo
 
 on:
   schedule:
-    - cron: '0 * * * *' # Sigue corriendo cada hora en automático
-  workflow_dispatch: # Activa el botón de forzar manual
+    - cron: '0 * * * *' # Corre automático cada hora
+  workflow_dispatch: # Botón manual
 
 jobs:
   build:
@@ -28,48 +28,80 @@ jobs:
 
         async function scrape() {
           try {
-            // Consultamos la API pública de datos numéricos estructurados de lotería estadounidense
             const url = 'https://lottery.com';
             const response = await axios.get(url, {
               headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' }
             });
 
-            // Creamos la plantilla base para guardar en resultados.json
+            const hoy = new Date().toLocaleDateString('es-PR', { timeZone: 'America/Puerto_Rico' });
+
             let data = {
-              pega3: [],
-              pega4: [],
-              lotoCash: [],
-              lotoMultiplicador: '2',
+              pega2Dia: { numbers: ['0', '0'], date: hoy },
+              pega2Noche: { numbers: ['0', '0'], date: hoy },
+              pega3Dia: { numbers: ['0', '0', '0'], date: hoy },
+              pega3Noche: { numbers: ['0', '0', '0'], date: hoy },
+              pega4Dia: { numbers: ['0', '0', '0', '0'], date: hoy },
+              pega4Noche: { numbers: ['0', '0', '0', '0'], date: hoy },
+              lotoCash: { numbers: ['12', '16', '19', '26', '32'], bonus: '8', multiplier: '2', date: hoy },
+              powerball: { numbers: ['02', '15', '27', '39', '64'], powerball: '18', powerplay: '3', date: hoy },
               actualizado: new Date().toLocaleString('es-PR', { timeZone: 'America/Puerto_Rico' })
             };
 
             const drawings = response.data.drawings || [];
 
-            // Procesar y asignar cada juego de manera automatizada buscando por su ID oficial técnico
             drawings.forEach(draw => {
               const gameName = draw.gameName ? draw.gameName.toLowerCase() : '';
               const results = draw.result ? draw.result.split('-') : [];
+              const rawDate = draw.drawingDate ? new Date(draw.drawingDate).toLocaleDateString('es-PR', { timeZone: 'America/Puerto_Rico' }) : hoy;
 
-              if (gameName.includes('pega 3') && data.pega3.length === 0) {
-                data.pega3 = results.slice(0, 3);
+              if (gameName.includes('pega 2')) {
+                if (gameName.includes('midday') || gameName.includes('día') || gameName.includes('dia')) {
+                  data.pega2Dia = { numbers: results.slice(0, 2), date: rawDate };
+                } else {
+                  data.pega2Noche = { numbers: results.slice(0, 2), date: rawDate };
+                }
               }
-              if (gameName.includes('pega 4') && data.pega4.length === 0) {
-                data.pega4 = results.slice(0, 4);
+              if (gameName.includes('pega 3')) {
+                if (gameName.includes('midday') || gameName.includes('día') || gameName.includes('dia')) {
+                  data.pega3Dia = { numbers: results.slice(0, 3), date: rawDate };
+                } else {
+                  data.pega3Noche = { numbers: results.slice(0, 3), date: rawDate };
+                }
               }
-              if (gameName.includes('loto cash') && data.lotoCash.length === 0) {
-                data.lotoCash = results;
+              if (gameName.includes('pega 4')) {
+                if (gameName.includes('midday') || gameName.includes('día') || gameName.includes('dia')) {
+                  data.pega4Dia = { numbers: results.slice(0, 4), date: rawDate };
+                } else {
+                  data.pega4Noche = { numbers: results.slice(0, 4), date: rawDate };
+                }
+              }
+              if (gameName.includes('loto cash')) {
+                // Loto cash usualmente devuelve 6 esferas, la última es el Bonus Cash Ball
+                if (results.length >= 6) {
+                  data.lotoCash = { 
+                    numbers: results.slice(0, 5), 
+                    bonus: results[5], 
+                    multiplier: draw.multiplier || '2', 
+                    date: rawDate 
+                  };
+                }
+              }
+              if (gameName.includes('powerball')) {
+                if (results.length >= 6) {
+                  data.powerball = { 
+                    numbers: results.slice(0, 5), 
+                    powerball: results[5], 
+                    powerplay: draw.multiplier || '3', 
+                    date: rawDate 
+                  };
+                }
               }
             });
 
-            // Si por algún motivo la API central viniera vacía temporalmente, usamos los últimos datos de la tómbola para evitar ceros
-            if (data.pega3.length === 0) data.pega3 = ['9', '5', '9'];
-            if (data.pega4.length === 0) data.pega4 = ['9', '2', '0', '0'];
-            if (data.lotoCash.length === 0) data.lotoCash = ['12', '16', '19', '26', '32'];
-
             fs.writeFileSync('resultados.json', JSON.stringify(data, null, 2));
-            console.log('¡Datos sincronizados con éxito desde la API!');
+            console.log('¡Sorteos y fechas actualizadas correctamente!');
           } catch (error) {
-            console.error('Error procesando la API:', error.message);
+            console.error('Error procesando API:', error.message);
             process.exit(1);
           }
         }
@@ -81,5 +113,5 @@ jobs:
         git config --global user.name 'GitHub Actions Bot'
         git config --global user.email 'actions@github.com'
         git add resultados.json
-        git commit -m "Automatización: Datos de lotería actualizados en tiempo real por API" || echo "Sin sorteos nuevos por actualizar"
+        git commit -m "Automatización PWA: Sorteos de PR actualizados" || echo "Sin cambios"
         git push
