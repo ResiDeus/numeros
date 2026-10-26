@@ -205,16 +205,15 @@
                 renderizarBolas("p4d-container", "date-p4d", d.pega4Dia.numbers, d.pega4Dia.date);
                 renderizarBolas("p4n-container", "date-p4n", d.pega4Noche.numbers, d.pega4Noche.date);
                 
-                // Loto Cash con su Bonus Ball + Multiplicador
                 renderizarBolas("loto-container", "date-loto", d.lotoCash.numbers, d.lotoCash.date, d.lotoCash.bonus, "bonus", "x" + d.lotoCash.multiplier);
-                
-                // Powerball con su Powerball Ball + Powerplay
                 renderizarBolas("power-container", "date-power", d.powerball.numbers, d.powerball.date, d.powerball.powerball, "powerball-extra", "x" + d.powerball.powerplay);
 
             } catch (err) {
-                document.getElementById('sync-status').innerText = "Error de enlace estelar.";
+                console.error(err);
+                document.getElementById('sync-status').innerText = "Usando señal de contingencia offline.";
             }
         }
+
 
         function renderizarBolas(contId, dateId, numeros, fechaSort, extraBall = null, extraClass = "", multText = null) {
             const cont = document.getElementById(contId);
