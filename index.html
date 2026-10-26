@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lotería de Puerto Rico - Resultados</title>
+    <style>
+        body { font-family: system-ui, -apple-system, sans-serif; background-color: #f7fafc; color: #2d3748; padding: 20px; text-align: center; }
+        .container { max-width: 480px; margin: 0 auto; }
+        h1 { color: #1a365d; font-size: 1.8rem; margin-bottom: 5px; }
+        .update-tag { font-size: 0.85rem; color: #718096; margin-bottom: 20px; }
+        .card { background: white; padding: 20px; margin: 15px 0; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-top: 5px solid #3182ce; text-align: center; }
+        .card.loto { border-top-color: #e53e3e; }
+        .game-title { font-size: 1.3rem; font-weight: bold; margin-bottom: 12px; color: #2d3748; }
+        .numbers { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
+        .ball { width: 42px; height: 42px; background: radial-gradient(circle at 30% 30%, #ecc94b, #d69e2e); color: white; font-weight: bold; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; box-shadow: 0 3px 6px rgba(0,0,0,0.1); }
+        .ball.red { background: radial-gradient(circle at 30% 30%, #e53e3e, #b3160e); }
+        .btn { background: #3182ce; color: white; border: none; padding: 12px 24px; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 15px; width: 100%; font-size: 1rem; }
+        .btn:hover { background: #2b6cb0; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>🇵🇷 Lotería Electrónica</h1>
+        <div class="update-tag" id="fecha-actualizacion">Cargando última actualización...</div>
+
+        <!-- Pega 3 -->
+        <div class="card">
+            <div class="game-title">Pega 3</div>
+            <div class="numbers" id="pega3-container"></div>
+        </div>
+
+        <!-- Pega 4 -->
+        <div class="card">
+            <div class="game-title">Pega 4</div>
+            <div class="numbers" id="pega4-container"></div>
+        </div>
+
+        <!-- Loto Cash -->
+        <div class="card loto">
+            <div class="game-title">Loto Cash</div>
+            <div class="numbers" id="loto-container"></div>
+        </div>
+
+        <button class="btn" onclick="obtenerDatosLocales()">🔄 Refrescar Pantalla</button>
+    </div>
+
+    <script>
+        async function obtenerDatosLocales() {
+            try {
+                // Buscamos el archivo JSON en tu propio repositorio de GitHub (¡Cero problemas de CORS!)
+                // Agregamos un número aleatorio al final (?v=...) para obligar al navegador a no usar caché vieja al dar F5
+                const respuesta = await fetch('resultados.json?v=' + Math.random());
+                const datos = await respuesta.json();
+
+                document.getElementById('fecha-actualizacion').innerText = "Último sorteo verificado: " + datos.actualizado;
+
+                // Renderizar Pega 3
+                inyectarBolas("pega3-container", datos.pega3);
+                // Renderizar Pega 4
+                inyectarBolas("pega4-container", datos.pega4);
+                // Renderizar Loto Cash + Multiplicador
+                inyectarBolas("loto-container", datos.lotoCash, datos.lotoMultiplicador);
+
+            } catch (error) {
+                console.error("Error al leer los datos locales:", error);
+                document.getElementById('fecha-actualizacion').innerText = "Error al sincronizar los números.";
+            }
+        }
+
+        function inyectarBolas(idContenedor, numeros, extra = null) {
+            const contenedor = document.getElementById(idContenedor);
+            contenedor.innerHTML = "";
+            
+            numeros.forEach(num => {
+                const bola = document.createElement("div");
+                bola.className = "ball";
+                bola.innerText = num;
+                contenedor.appendChild(bola);
+            });
+
+            if (extra) {
+                const bolaExtra = document.createElement("div");
+                bolaExtra.className = "ball red";
+                bolaExtra.innerText = "x" + extra;
+                contenedor.appendChild(bolaExtra);
+            }
+        }
+
+        // Ejecutar inmediatamente al abrir o refrescar
+        window.onload = obtenerDatosLocales;
+    </script>
+</body>
+</html>
