@@ -84,9 +84,21 @@
         .card.loto .ball { border-color: #00f2fe; color: #00f2fe; text-shadow: 0 0 5px #00f2fe; box-shadow: inset 0 0 8px rgba(0,242,254,0.6); }
         .card.powerball .ball { border-color: #9d4edd; color: #9d4edd; text-shadow: 0 0 5px #9d4edd; box-shadow: inset 0 0 8px rgba(157,78,221,0.6); }
 
-        .ball.bonus { background: #ff007f; color: #000; text-shadow: none; box-shadow: 0 0 10px #ff007f; }
-        
-        /* CORRECCIÓN DE CONTRASTE: Fondo púrpura neón con texto blanco brillante */
+        /* Ajuste de Contraste con texto blanco puro reflectivo para las esferas de bolo extra */
+        .ball.bonus { 
+            background: #ff007f; 
+            color: #ffffff !important; 
+            text-shadow: 0 0 8px #ffffff, 0 0 15px #ff007f; 
+            box-shadow: 0 0 15px #ff007f;
+            border-color: #fff;
+        }
+        .ball.loto-bonus { 
+            background: #00f2fe; 
+            color: #ffffff !important; 
+            text-shadow: 0 0 8px #ffffff, 0 0 15px #00f2fe; 
+            box-shadow: 0 0 15px #00f2fe;
+            border-color: #fff;
+        }
         .ball.powerball-extra { 
             background: #9d4edd; 
             color: #ffffff !important; 
@@ -128,52 +140,68 @@
         <h1>Cyber Tómbola</h1>
         <div class="sub" id="sync-status">Cargando Red de Neón...</div>
 
+        <!-- PEGA 2 D/N -->
         <div class="card">
             <div class="game-title">Pega 2 Día</div>
             <div class="date" id="date-p2d">--/--/----</div>
             <div class="balls-row" id="p2d-container"></div>
         </div>
-
         <div class="card">
             <div class="game-title">Pega 2 Noche</div>
             <div class="date" id="date-p2n">--/--/----</div>
             <div class="balls-row" id="p2n-container"></div>
         </div>
 
+        <!-- PEGA 3 D/N -->
         <div class="card">
             <div class="game-title">Pega 3 Día</div>
             <div class="date" id="date-p3d">--/--/----</div>
             <div class="balls-row" id="p3d-container"></div>
         </div>
-
         <div class="card">
             <div class="game-title">Pega 3 Noche</div>
             <div class="date" id="date-p3n">--/--/----</div>
             <div class="balls-row" id="p3n-container"></div>
         </div>
 
+        <!-- PEGA 4 D/N -->
         <div class="card">
             <div class="game-title">Pega 4 Día</div>
             <div class="date" id="date-p4d">--/--/----</div>
             <div class="balls-row" id="p4d-container"></div>
         </div>
-
         <div class="card">
             <div class="game-title">Pega 4 Noche</div>
             <div class="date" id="date-p4n">--/--/----</div>
             <div class="balls-row" id="p4n-container"></div>
         </div>
 
+        <!-- LOTO CASH -->
         <div class="card loto">
             <div class="game-title">Loto Cash</div>
             <div class="date" id="date-loto">--/--/----</div>
             <div class="balls-row" id="loto-container"></div>
         </div>
 
+        <!-- REVANCHA -->
+        <div class="card loto">
+            <div class="game-title">La Revancha</div>
+            <div class="date" id="date-revancha">--/--/----</div>
+            <div class="balls-row" id="revancha-container"></div>
+        </div>
+
+        <!-- POWERBALL -->
         <div class="card powerball">
             <div class="game-title">Powerball®</div>
             <div class="date" id="date-power">--/--/----</div>
             <div class="balls-row" id="power-container"></div>
+        </div>
+
+        <!-- DOUBLE PLAY -->
+        <div class="card powerball">
+            <div class="game-title">Double Play</div>
+            <div class="date" id="date-double">--/--/----</div>
+            <div class="balls-row" id="double-container"></div>
         </div>
 
         <button class="btn-glow" onclick="conectarTómbola()">🔄 Sincronizar Señal</button>
@@ -194,8 +222,11 @@
                 renderizarBolas("p4d-container", "date-p4d", d.pega4Dia.numbers, d.pega4Dia.date);
                 renderizarBolas("p4n-container", "date-p4n", d.pega4Noche.numbers, d.pega4Noche.date);
                 
-                renderizarBolas("loto-container", "date-loto", d.lotoCash.numbers, d.lotoCash.date, d.lotoCash.bonus, "bonus", "x" + d.lotoCash.multiplier);
+                renderizarBolas("loto-container", "date-loto", d.lotoCash.numbers, d.lotoCash.date, d.lotoCash.bonus, "loto-bonus", "x" + d.lotoCash.multiplier);
+                renderizarBolas("revancha-container", "date-revancha", d.revancha.numbers, d.revancha.date, d.revancha.bonus, "bonus");
+                
                 renderizarBolas("power-container", "date-power", d.powerball.numbers, d.powerball.date, d.powerball.powerball, "powerball-extra", "x" + d.powerball.powerplay);
+                renderizarBolas("double-container", "date-double", d.doublePlay.numbers, d.doublePlay.date, d.doublePlay.powerball, "powerball-extra");
 
             } catch (err) {
                 document.getElementById('sync-status').innerText = "Fallo en enlace estelar.";
