@@ -170,13 +170,13 @@
         <button class="btn-glow" onclick="conectarTómbola()">🔄 Sincronizar Señal</button>
     </div>
 
-    <script>
+        <script>
         async function conectarTómbola() {
             try {
                 const res = await fetch('resultados.json?_nocache=' + new Date().getTime());
                 const d = await res.json();
 
-                document.getElementById('sync-status').innerText = "Estación en Línea: " + d.actualizado;
+                document.getElementById('sync-status').innerText = "Terminal Sincronizada: " + d.actualizado;
 
                 renderizarBolas("p2d-container", "date-p2d", d.pega2Dia.numbers, d.pega2Dia.date);
                 renderizarBolas("p2n-container", "date-p2n", d.pega2Noche.numbers, d.pega2Noche.date);
@@ -189,22 +189,27 @@
                 renderizarBolas("power-container", "date-power", d.powerball.numbers, d.powerball.date, d.powerball.powerball, "powerball-extra", "x" + d.powerball.powerplay);
 
             } catch (err) {
-                document.getElementById('sync-status').innerText = "Fallo en enlace estelar.";
+                console.error(err);
+                document.getElementById('sync-status').innerText = "Error de enlace estelar.";
             }
         }
 
         function renderizarBolas(contId, dateId, numeros, fechaSort, extraBall = null, extraClass = "", multText = null) {
             const cont = document.getElementById(contId);
+            if (!cont) return;
             document.getElementById(dateId).innerText = "Sorteo: " + fechaSort;
             cont.innerHTML = "";
 
+            if (!numeros || numeros.length === 0) {
+                cont.innerHTML = "<span style='color:#ff007f'>Espacio Vacío</span>";
+                return;
+            }
+
             numeros.forEach(n => {
-                if(n.trim() !== "") {
-                    const b = document.createElement("div");
-                    b.className = "ball";
-                    b.innerText = n;
-                    cont.appendChild(b);
-                }
+                const b = document.createElement("div");
+                b.className = "ball";
+                b.innerText = n;
+                cont.appendChild(b);
             });
 
             if (extraBall && extraBall.trim() !== "") {
@@ -228,5 +233,6 @@
 
         window.onload = conectarTómbola;
     </script>
+
 </body>
 </html>
