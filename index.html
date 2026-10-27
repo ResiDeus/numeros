@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Retro Tómbola PR</title>
-    <!-- Configuración PWA Móvil -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#050515">
@@ -34,45 +33,36 @@
         .container { max-width: 440px; margin: 0 auto; padding-bottom: 30px; }
         
         h1 {
-            font-size: 2.2rem;
+            font-size: 2.1rem;
             text-transform: uppercase;
             color: #fff;
             text-shadow: 0 0 10px #ff007f, 0 0 20px #ff007f, 0 0 40px #ff007f;
             margin-bottom: 2px;
             font-style: italic;
+            text-align: center;
         }
         
-        .sub { color: #00f2fe; text-shadow: 0 0 5px #00f2fe; font-size: 0.8rem; margin-bottom: 25px; text-transform: uppercase; }
+        .sub { color: #00f2fe; text-shadow: 0 0 5px #00f2fe; font-size: 0.8rem; margin-bottom: 25px; text-transform: uppercase; text-align: center; }
 
         .card {
-            background: rgba(10, 10, 30, 0.85);
+            background: rgba(10, 10, 30, 0.9);
             border: 2px solid #ff007f;
             border-radius: 16px;
             padding: 16px;
             margin: 18px 0;
             box-shadow: 0 0 15px rgba(255, 0, 127, 0.4);
-            position: relative;
             backdrop-filter: blur(5px);
         }
 
         .card.loto { border-color: #00f2fe; box-shadow: 0 0 15px rgba(0, 242, 254, 0.4); }
         .card.powerball { border-color: #9d4edd; box-shadow: 0 0 15px rgba(157, 78, 221, 0.4); }
 
-        .game-title {
-            font-size: 1.2rem;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            text-align: left;
-            margin-bottom: 2px;
-            color: #fff;
-        }
+        .game-title { font-size: 1.2rem; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 2px; }
+        .card .game-title { color: #ff007f; text-shadow: 0 0 5px #ff007f; }
         .card.loto .game-title { color: #00f2fe; text-shadow: 0 0 5px #00f2fe; }
         .card.powerball .game-title { color: #9d4edd; text-shadow: 0 0 5px #9d4edd; }
         
-        .date { font-size: 0.75rem; color: #ff007f; opacity: 0.8; text-align: left; margin-bottom: 12px; }
-        .card.loto .date { color: #00f2fe; }
-        .card.powerball .date { color: #9d4edd; }
+        .date { font-size: 0.75rem; color: #fff; opacity: 0.7; margin-bottom: 12px; }
 
         .balls-row { display: flex; gap: 8px; justify-content: flex-start; flex-wrap: wrap; }
         
@@ -94,12 +84,10 @@
         .card.loto .ball { border-color: #00f2fe; color: #00f2fe; text-shadow: 0 0 5px #00f2fe; box-shadow: inset 0 0 8px rgba(0,242,254,0.6); }
         .card.powerball .ball { border-color: #9d4edd; color: #9d4edd; text-shadow: 0 0 5px #9d4edd; box-shadow: inset 0 0 8px rgba(157,78,221,0.6); }
 
-        /* Esferas Especiales de Bonos */
         .ball.bonus { background: #ff007f; color: #000; text-shadow: none; box-shadow: 0 0 10px #ff007f; }
         .ball.powerball-extra { background: #9d4edd; color: #000; text-shadow: none; box-shadow: 0 0 10px #9d4edd; }
         .ball.mult { border-radius: 8px; width: auto; padding: 0 10px; font-size: 0.9rem; background: rgba(0,242,254,0.2); }
 
-        /* Botón de actualización Futurista */
         .btn-glow {
             width: 100%;
             background: #000;
@@ -129,65 +117,57 @@
 
     <div class="container">
         <h1>Cyber Tómbola</h1>
-        <div class="sub" id="sync-status">Sincronizando red espacial...</div>
+        <div class="sub" id="sync-status">Cargando Red de Neón...</div>
 
-        <!-- PEGA 2 DIA -->
         <div class="card">
             <div class="game-title">Pega 2 Día</div>
             <div class="date" id="date-p2d">--/--/----</div>
             <div class="balls-row" id="p2d-container"></div>
         </div>
 
-        <!-- PEGA 2 NOCHE -->
         <div class="card">
             <div class="game-title">Pega 2 Noche</div>
             <div class="date" id="date-p2n">--/--/----</div>
             <div class="balls-row" id="p2n-container"></div>
         </div>
 
-        <!-- PEGA 3 DIA -->
         <div class="card">
             <div class="game-title">Pega 3 Día</div>
             <div class="date" id="date-p3d">--/--/----</div>
             <div class="balls-row" id="p3d-container"></div>
         </div>
 
-        <!-- PEGA 3 NOCHE -->
         <div class="card">
             <div class="game-title">Pega 3 Noche</div>
             <div class="date" id="date-p3n">--/--/----</div>
             <div class="balls-row" id="p3n-container"></div>
         </div>
 
-        <!-- PEGA 4 DIA -->
         <div class="card">
             <div class="game-title">Pega 4 Día</div>
             <div class="date" id="date-p4d">--/--/----</div>
             <div class="balls-row" id="p4d-container"></div>
         </div>
 
-        <!-- PEGA 4 NOCHE -->
         <div class="card">
             <div class="game-title">Pega 4 Noche</div>
             <div class="date" id="date-p4n">--/--/----</div>
             <div class="balls-row" id="p4n-container"></div>
         </div>
 
-        <!-- LOTO CASH -->
         <div class="card loto">
             <div class="game-title">Loto Cash</div>
             <div class="date" id="date-loto">--/--/----</div>
             <div class="balls-row" id="loto-container"></div>
         </div>
 
-        <!-- POWERBALL -->
         <div class="card powerball">
             <div class="game-title">Powerball®</div>
             <div class="date" id="date-power">--/--/----</div>
             <div class="balls-row" id="power-container"></div>
         </div>
 
-        <button class="btn-glow" onclick="conectarTómbola()">🔄 Forzar Señal Neon</button>
+        <button class="btn-glow" onclick="conectarTómbola()">🔄 Sincronizar Señal</button>
     </div>
 
     <script>
@@ -196,7 +176,7 @@
                 const res = await fetch('resultados.json?_nocache=' + new Date().getTime());
                 const d = await res.json();
 
-                document.getElementById('sync-status').innerText = "Terminal Sincronizada: " + d.actualizado;
+                document.getElementById('sync-status').innerText = "Estación en Línea: " + d.actualizado;
 
                 renderizarBolas("p2d-container", "date-p2d", d.pega2Dia.numbers, d.pega2Dia.date);
                 renderizarBolas("p2n-container", "date-p2n", d.pega2Noche.numbers, d.pega2Noche.date);
@@ -209,11 +189,9 @@
                 renderizarBolas("power-container", "date-power", d.powerball.numbers, d.powerball.date, d.powerball.powerball, "powerball-extra", "x" + d.powerball.powerplay);
 
             } catch (err) {
-                console.error(err);
-                document.getElementById('sync-status').innerText = "Usando señal de contingencia offline.";
+                document.getElementById('sync-status').innerText = "Fallo en enlace estelar.";
             }
         }
-
 
         function renderizarBolas(contId, dateId, numeros, fechaSort, extraBall = null, extraClass = "", multText = null) {
             const cont = document.getElementById(contId);
@@ -221,20 +199,22 @@
             cont.innerHTML = "";
 
             numeros.forEach(n => {
-                const b = document.createElement("div");
-                b.className = "ball";
-                b.innerText = n;
-                cont.appendChild(b);
+                if(n.trim() !== "") {
+                    const b = document.createElement("div");
+                    b.className = "ball";
+                    b.innerText = n;
+                    cont.appendChild(b);
+                }
             });
 
-            if (extraBall) {
+            if (extraBall && extraBall.trim() !== "") {
                 const eb = document.createElement("div");
                 eb.className = `ball ${extraClass}`;
                 eb.innerText = extraBall;
                 cont.appendChild(eb);
             }
 
-            if (multText) {
+            if (multText && !multText.includes('undefined')) {
                 const mb = document.createElement("div");
                 mb.className = "ball mult";
                 mb.innerText = multText;
@@ -242,12 +222,10 @@
             }
         }
 
-        // Service Worker básico integrado para cumplir los requisitos de PWA móvil
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('data:text/javascript,self.addEventListener(%22fetch%22,function(e){})', {scope: './'});
         }
 
-        // Ejecutar inmediatamente al abrir la terminal o dar refresh (F5)
         window.onload = conectarTómbola;
     </script>
 </body>
