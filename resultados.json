@@ -1,75 +1,13 @@
 {
-  "pega2Dia": {
-    "numbers": [
-      "4",
-      "3"
-    ],
-    "date": "26/10/2026"
-  },
-  "pega2Noche": {
-    "numbers": [
-      "6",
-      "4"
-    ],
-    "date": "24/10/2026"
-  },
-  "pega3Dia": {
-    "numbers": [
-      "2",
-      "3",
-      "7"
-    ],
-    "date": "26/10/2026"
-  },
-  "pega3Noche": {
-    "numbers": [
-      "9",
-      "5",
-      "9"
-    ],
-    "date": "24/10/2026"
-  },
-  "pega4Dia": {
-    "numbers": [
-      "3",
-      "3",
-      "8",
-      "0"
-    ],
-    "date": "26/10/2026"
-  },
-  "pega4Noche": {
-    "numbers": [
-      "9",
-      "2",
-      "0",
-      "0"
-    ],
-    "date": "24/10/2026"
-  },
-  "lotoCash": {
-    "numbers": [
-      "12",
-      "16",
-      "19",
-      "26",
-      "32"
-    ],
-    "bonus": "08",
-    "multiplier": "2",
-    "date": "23/10/2026"
-  },
-  "powerball": {
-    "numbers": [
-      "02",
-      "15",
-      "27",
-      "39",
-      "64"
-    ],
-    "powerball": "18",
-    "powerplay": "3",
-    "date": "24/10/2026"
-  },
-  "actualizado": "10/26/2026, 11:33:52 p. m."
+  "pega2Dia": { "numbers": ["4", "3"], "date": "26/10/2026" },
+  "pega2Noche": { "numbers": ["2", "2"], "date": "26/10/2026" },
+  "pega3Dia": { "numbers": ["2", "3", "7"], "date": "26/10/2026" },
+  "pega3Noche": { "numbers": ["6", "1", "2"], "date": "26/10/2026" },
+  "pega4Dia": { "numbers": ["3", "3", "8", "0"], "date": "26/10/2026" },
+  "pega4Noche": { "numbers": ["9", "4", "5", "2"], "date": "26/10/2026" },
+  "lotoCash": { "numbers": ["22", "34", "03", "11", "29"], "bonus": "08", "multiplier": "4", "date": "26/10/2026" },
+  "revancha": { "numbers": ["01", "35", "28", "19", "05"], "bonus": "02", "date": "26/10/2026" },
+  "powerball": { "numbers": ["18", "26", "49", "50", "54"], "powerball": "01", "powerplay": "3", "date": "26/10/2026" },
+  "doublePlay": { "numbers": ["03", "30", "44", "50", "56"], "powerball": "23", "date": "26/10/2026" },
+  "actualizado": "26/10/2026, 11:37 PM (Fiel de Tómbola)"
 }
