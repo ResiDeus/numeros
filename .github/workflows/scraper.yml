@@ -2,8 +2,8 @@ name: Actualizar Loteria PR en Vivo
 
 on:
   schedule:
-    - cron: '0 * * * *' # Corre cada hora automáticamente
-  workflow_dispatch: # Permite ejecución manual
+    - cron: '0 * * * *'
+  workflow_dispatch:
 
 jobs:
   build:
@@ -27,7 +27,6 @@ jobs:
         const fs = require('fs');
 
         async function scrape() {
-          // Valores oficiales auditados del último sorteo real de Puerto Rico como base de contingencia
           let data = {
             pega2Dia: { numbers: ['4', '3'], date: '26/10/2026' },
             pega2Noche: { numbers: ['6', '4'], date: '24/10/2026' },
@@ -43,7 +42,7 @@ jobs:
           try {
             const url = 'https://lottery.com';
             const response = await axios.get(url, {
-              headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' },
+              headers: { 'User-Agent': 'Mozilla/5.0' },
               timeout: 10000
             });
 
@@ -98,11 +97,9 @@ jobs:
             });
 
           } catch (error) {
-            console.log('API congestionada. Desplegando bóveda de datos verificados.');
+            console.log('Usando bóveda estática de contingencia.');
           } finally {
-            // Se garantiza la escritura de datos reales, previniendo cuelgues del proceso
             fs.writeFileSync('resultados.json', JSON.stringify(data, null, 2));
-            console.log('¡Resultados listos para producción!');
           }
         }
         scrape();
@@ -113,5 +110,5 @@ jobs:
         git config --global user.name 'GitHub Actions Bot'
         git config --global user.email 'actions@github.com'
         git add resultados.json
-        git commit -m "Automatización: Datos de Puerto Rico actualizados" || echo "Sin cambios"
+        git commit -m "Automatización: Extracción de posiciones fijada" || echo "Sin cambios"
         git push
